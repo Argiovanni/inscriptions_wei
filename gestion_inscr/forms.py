@@ -1,0 +1,35 @@
+from django import forms
+from .models import Inscrit,Bungalow
+
+PAIEMENT_CHOICES = [('L', "Lydia"), ('C',"Chèque"), ('E', "Espèce")]
+
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Identifiant",
+                "class": "form-control"
+        }))
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Mot de passe",
+                "class": "form-control"
+        }))
+
+class PaiementPlaceForm(forms.ModelForm):
+    class Meta:
+        model = Inscrit
+        fields = ('paiement',)
+    def __init__(self,  *args, **kwargs):
+        super(PaiementPlaceForm, self).__init__(*args, **kwargs)
+        self.fields['paiement'].queryset = [choice[1] for choice in PAIEMENT_CHOICES]
+        
+class PaiementCautionForm(forms.ModelForm):
+    class Meta:
+        model = Inscrit
+        fields = ('caution',)
+    def __init__(self,  *args, **kwargs):
+        super(PaiementCautionForm, self).__init__(*args, **kwargs)
+        self.fields['caution'].queryset = [choice[1] for choice in PAIEMENT_CHOICES]
+        self.fields['caution'].empty_label = None

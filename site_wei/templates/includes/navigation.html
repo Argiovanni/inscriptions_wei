@@ -1,0 +1,32 @@
+<div class="container position-relative">
+    <a class="navbar me-lg-5" href="/"> 
+        <img src="/static/assets/img/Base_sans_fond.png" class="d-block mx-auto mb-3" height="100" width="100" alt="wei Logo"></a>
+    <div class="navbar-collapse collapse me-auto" id="navbar_global">
+        
+        <ul class="navbar-nav align-items-lg-center">
+            <li class="nav-item">
+                <a href="/inscrit" id="inscrit_nav_link" style="margin-left:4em">
+                    /&nbsp;&nbsp;&nbsp;&nbsp;Page Inscription&nbsp;&nbsp;&nbsp;&nbsp;/   
+                </a>
+            </li>
+            <li class="nav_item">
+                <a href="/bungalow" id="bungalow_nav_link" style="margin-left:4em">
+                    /&nbsp;&nbsp;&nbsp;&nbsp;Page Bungalow&nbsp;&nbsp;&nbsp;&nbsp;/
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="d-flex align-items-center">
+        {%if user.is_authenticated %}
+            {% if user.is_superuser %}
+            <a href="/admin" class="btn btn-icon btn-info d-none d-lg-inline me-md-3"><span
+                class="fas fa-unlock-alt me-2"></span> Admin </a>
+            {%endif%}
+            <a href="{% url 'logout' %}" class="btn btn-icon btn-info d-none d-lg-inline me-md-3"><span
+                    class="fas fa-sign-out-alt me-2"></span> Deconnexion </a>
+        {%else%}
+            <a href="{% url 'login' %}" class="btn btn-icon btn-info d-none d-lg-inline me-md-3"><span
+                    class="fas fa-sign-in-alt me-2"></span> Connexion </a>
+        {%endif%}
+    </div>
+</div>

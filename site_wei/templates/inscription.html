@@ -1,0 +1,146 @@
+{% extends "layouts/base.html" %}
+{% block title %} Acceuil {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<!--jquery datatable :-> allow user to sort by column on-click-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+  
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" class="init">
+    $(document).ready(function () {
+        var table = $('#datatable').DataTable({ 
+            paging: false,
+            scrollY: 550,
+            "dom": '<"top"i>rt<"bottom"><"clear">'
+        });
+        $('#mySearchButton').on( 'keyup click', function () {
+            table.search($('#mySearchText').val()).draw();
+          } );
+    });    
+</script>
+<!---->
+<section class="section-header overflow-hidden pt-7 pt-lg-8 pb-9 pb-lg-12">
+    <div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="fw-bolder display-2">Gestion des inscriptions</span></h1>
+                <div class="d-flex justify-content-center">
+                    <div class="recordsTable"  style="width:95%;">
+                        <p>
+                            <input type="text" id="mySearchText" placeholder="Search client">
+                            <button id="mySearchButton">Search</button>
+                          </p>
+                        <table class="table table-bordered cell-border stripe display compact" data-toggle="table" id="datatable"
+                                style="background-color: #f5be55;">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prenom</th>
+                                    <th>Promo</th>
+                                    <th>type billet</th>
+                                    <th>prix place</th>
+                                    <th>type paiement</th>
+                                    <th>statut place</th>
+                                    <th>Val. caution</th>
+                                    <th>type caution</th>
+                                    <th>statut caution</th>
+                                    <th>décharge</th>
+                                    <th>Payer</th>
+                                    <th>Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inscrit in inscrits %}
+                                
+                                <tr>
+                                    <td> {{ inscrit.nom }}</td>
+                                    <td> {{ inscrit.prenom }}</td>
+                                    <td> {{ inscrit.promo }} {{ inscrit.filier }}</td>
+                                    <td> {%if inscrit.type_billet == 'O' %}cautisant
+                                         {%elif inscrit.type_billet == 'N' %} non cautisant
+                                         {%elif inscrit.staffeur == 'T' %} TVN7
+                                         {%elif inscrit.staffeur == 'C' %} CAN7
+                                         {%elif inscrit.staffeur == 'P' %} PHOTO7
+                                         {%else%} staff AE
+                                         {%endif%}
+                                    </td>    
+                                    <td> {{ inscrit.prix_place }}</td>
+                                    <td> {%if inscrit.paiement == 'L' %}Lydia
+                                         {%elif inscrit.paiement == 'E' %}Espèce
+                                         {%elif inscrit.paiement == 'C' %}Chèque
+                                         {%endif%}
+                                    </td>
+                                    <td> {%if inscrit.place_paye %} place-OK
+                                         {%else%} place-NotOK
+                                         {%endif%} </td>
+                                    <td> {{ inscrit.valeur_caution }}</td>
+                                    <td> {%if inscrit.caution == 'L' %}Lydia
+                                        {%elif inscrit.caution == 'E' %}Espèce
+                                        {%elif inscrit.caution == 'C' %}Chèque
+                                        {%endif%}
+                                    </td>
+                                    <td> {%if inscrit.caution_paye %} caution-OK
+                                         {%else%} caution-NotOk
+                                         {%endif%} </td>
+                                    <td> {{ inscrit.decharge_signe }}
+                                        <form method="POST" action="">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-icon btn-info" name="decharge" value={{ inscrit.id }} onclick="return confirm('Modifier le statut de la décharge de cette inscrit ?');">Update</button>
+                                        </form>
+                                    </td>
+                                    <td> 
+                                            <div style="border-bottom: 1px solid black">
+                                                <form action="" method='POST'>
+                                                    {% csrf_token %}
+                                                    <div>
+                                                        <div>
+                                                            <label>Paiement</label>
+                                                            {{ form_pl.paiement }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <button type="submit" name= Participant value = {{ inscrit.id }} class="btn btn-icon btn-info"
+                                                            onclick="return confirm('Le client a-t-il effectivement payé sa PLACE avec ce mode de paiement ?');">
+                                                                Valider
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div style="border-top: 1px solid black">
+                                                <form action="" method='POST'>
+                                                    {% csrf_token %}
+                                                    <div>
+                                                        <div>
+                                                            <label>Caution</label>
+                                                            {{ form_c.caution }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <button type="submit" name= Participant value = {{ inscrit.id }} class="btn btn-icon btn-info"
+                                                            onclick="return confirm('Le client a-t-il effectivemetn payer sa CAUTION avec ce mode paiement ?');">
+                                                                Valider
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                    </td>
+                                    <td> {{ inscrit.commentaires }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
