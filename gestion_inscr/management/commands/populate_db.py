@@ -1,13 +1,19 @@
 ### ce script ajoute a la DB les inscrit depuis un fichier .csv
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandParser
 import csv
 from datetime import datetime
 from gestion_inscr.models import Inscrit
 
 class Command(BaseCommand):
-    def handle(self, **options):
+    
+    help = 'populate DB using csv file passed in param'
+    
+    def add_arguments(self, parser: CommandParser) -> None:
+        parser.add_argument('csv_file_path', type=str, help="path to the csv")
+    
+    def handle(self,*args, **kwargs):
         # now do the things that you want with your models here
-        csv_file_path = 'csv_sg_churros/ShotgunWEI2023.csv' # Replace with your actual file path
+        csv_file_path = kwargs['csv_file_path']
         print("start script")
         with open(csv_file_path, 'r') as fd :
             reader = csv.reader(fd)
