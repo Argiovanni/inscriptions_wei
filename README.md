@@ -1,6 +1,7 @@
 # inscriptions_wei
 petite app web en django pour faciliter la gestion des inscriptions du wei
 
+Manual launch : 
 ```bash
 $
 $ # Virtualenv modules installation (Unix based systems)
@@ -24,4 +25,12 @@ $ # Start the app - custom port
 $ # python manage.py runserver 0.0.0.0:<your_port>
 $
 $ # Access the web app in browser: http://127.0.0.1:8000/
+```
+
+Docker launch :
+```bash
+$
+$ docker-compose up --build -d
+$
+$ # Access the web app in browser: http://127.0.0.1:5005/
 ```
