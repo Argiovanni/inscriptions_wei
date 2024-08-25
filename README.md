@@ -32,5 +32,5 @@ Docker launch :
 $
 $ docker-compose up --build -d
 $
-$ # Access the web app in browser: http://127.0.0.1:5005/
+$ # Access the web app in browser: http://127.0.0.1:85/
 ```
