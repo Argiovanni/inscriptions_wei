@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
-CSRF_TRUSTED_ORIGINS = [config('DOMAIN', default='http://127.0.0.1:85'),'http://127.0.0.1:85','http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = [config('APP_ADDRESS', default='http://127.0.0.1:85'),'http://127.0.0.1:85','http://127.0.0.1:8000']
 
 # Application definition
 

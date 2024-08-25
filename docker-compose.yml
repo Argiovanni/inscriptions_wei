@@ -4,6 +4,8 @@ services:
     container_name: wei_app
     restart: always
     env_file: .env
+    volumes:
+      - ./db.sqlite3:/db.sqlite3:rw
     build: .
     networks:
       - db_network
