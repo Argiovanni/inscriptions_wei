@@ -1,0 +1,118 @@
+{% extends "layouts/base.html" %}
+{% block title %} Acceuil {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<!--jquery datatable :-> allow user to sort by column on-click-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+  
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" class="init">
+    $(document).ready(function () {
+        var table = $('#datatable').DataTable({ 
+            paging: false,
+            scrollY: 550,
+            "dom": '<"top"i>rt<"bottom"><"clear">'
+        });
+        $('#mySearchButton').on( 'keyup click', function () {
+            table.search($('#mySearchText').val()).draw();
+          } );
+    });    
+</script>
+<!---->
+<section class="section-header overflow-hidden pt-7 pt-lg-8 pb-9 pb-lg-12">
+    <div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="fw-bolder display-2">Gestion des inscriptions</span></h1>
+                <div class="d-flex justify-content-center">
+                    <div class="recordsTable"  style="width:95%;">
+                        <p>
+                            <input type="text" id="mySearchText" placeholder="Search client">
+                            <button id="mySearchButton">Search</button>
+                          </p>
+                        <table class="table table-bordered cell-border stripe display compact" data-toggle="table" id="datatable"
+                                style="background-color: #f5be55;">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Membres</th>
+                                    <th>Caution</th>
+                                    <th>Ajouter membre</th>
+                                    <th>déduire caution</th>
+                                    <th>rendre caution participants</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bungalow in bungalows %}
+                                
+                                <tr>
+                                    <td> {{ bungalow.code }}</td>
+                                    <td> {% for member in bungalow.get_members %} 
+                                            / {{ member }} / 
+                                        {%endfor%}
+                                    </td>
+                                    <td> {{ bungalow.caution_total }}</td>
+                                    
+                                    <td> 
+                                        <form action="" method='POST'>
+                                            {% csrf_token %}
+                                            <div>
+                                                <div>
+                                                    <label>Inscrit</label>
+                                                    {{ form_m.participant }}
+                                                </div>
+                                            </div>
+                                            <div class="mt-2">
+                                                <button type="submit" name="Bungalow" value = {{ bungalow.id }} class="btn btn-icon btn-info"
+                                                    onclick="return confirm('Voulez-vous vraiment ajouter cette personne à ce bungalow ?');">
+                                                        Valider
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </td>
+
+                                    <td> 
+                                        <form method="POST" action="">
+                                            {% csrf_token %}
+                                            <div>
+                                                <div>
+                                                    <label>Montant</label>
+                                                    {{ form_d.montant }}
+                                                </div>
+                                            </div>
+                                            <div class="mt-2">
+                                                <button type="submit" name="Bungalow" value={{ bungalow.id }} class="btn btn-icon btn-info"
+                                                    onclick="return confirm('Voulez-vous vraiment déduire ce montant sur la caution de ce bungalow ?');">
+                                                        Déduire
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                    <td> {%if bungalow.caution_total <= 0%}
+                                            Pas de caution
+                                        {%else%}
+                                            <form method="POST" action="">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-icon btn-info" name="rendre_caution" value={{ bungalow.id }} onclick="return confirm('Voulez-vous vraiment rendre la caution de ce bungalow à ses membres ?');">Rendre caution</button>
+                                            </form>
+                                        {%endif%}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

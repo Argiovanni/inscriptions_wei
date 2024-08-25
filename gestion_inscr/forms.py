@@ -33,3 +33,9 @@ class PaiementCautionForm(forms.ModelForm):
         super(PaiementCautionForm, self).__init__(*args, **kwargs)
         self.fields['caution'].queryset = [choice[1] for choice in PAIEMENT_CHOICES]
         self.fields['caution'].empty_label = None
+        
+class AddMemberForm(forms.Form):
+    participant = forms.ModelChoiceField(queryset=Inscrit.objects.filter(bungalow=None, place_paye=True, caution_paye=True), required=True)
+
+class MontantCautionForm(forms.Form):
+    montant = forms.FloatField(widget=forms.NumberInput,required=True, initial=0)

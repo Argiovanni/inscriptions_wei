@@ -12,22 +12,39 @@ class Bungalow(models.Model):
     def __str__(self) -> str:
         return self.code
     
+    def get_members(self):
+        return Inscrit.objects.filter(bungalow=self.id)
+    
+    def substract_from_caution(self, price):
+        if price < 0:
+            return
+        
+        if price > self.caution_total:
+            self.caution_total = 0
+        else:
+            self.caution_total -= price
+        
+        if self.nb_pers > 0:
+            members = self.get_members()
+            for member in members:
+                new_caution = member.valeur_caution - price/self.nb_pers
+                if new_caution < 0:
+                    print("/!\ problem new caution < 0")
+                    member.update_caution(0)
+                else:
+                    member.update_caution(new_caution)
+        self.save()
+        return
+    
     def add_pers(self, inscrit):
         self.nb_pers += 1
         self.caution_total += inscrit.valeur_caution
-        inscrit.bungalow = self.id
+        inscrit.bungalow = self
+        inscrit.save()
         self.save()
         return
-
-    def update_caution(self, new_value):
-        self.caution_total = new_value
-        if self.nb_pers > 0:
-            new_caution = new_value/self.nb_pers
-            pers = Inscrit.objects.filter(Bungalow_id=self.id)
-            for per in pers:
-                per.update_caution(new_caution)
-        self.save()
-        return
+    
+    
                 
 
 class Inscrit(models.Model):
