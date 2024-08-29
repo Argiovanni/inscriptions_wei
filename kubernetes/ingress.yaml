@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: inscriptions-wei-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    umami.is/inject: all
+spec:
+  rules:
+  - host: wei.k8s.inpt.fr
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: inscriptions-wei
+            port:
+              number: 5005
+  tls:
+  - hosts:
+    - wei.k8s.inpt.fr
+    secretName: inscriptions-wei-tls
+
