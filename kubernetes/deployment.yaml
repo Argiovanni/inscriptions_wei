@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inscriptions-wei
+spec:
+  template:
+    spec:
+      containers:
+      - name: inscriptions-wei
+        image: harbor.k8s.inpt.fr/net7_public/inscriptions_wei:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5005
+        envFrom:
+        - configMapRef:
+            name: inscriptions-wei-config
+        - secretRef:
+            name: inscriptions-wei-secret
+        volumeMounts:
+        - mountPath: /db
+          name: inscriptions-wei-data
+      volumes:
+      - name: inscriptions-wei-data
+        persistentVolumeClaim:
+          claimName: inscriptions-wei-pvc
+

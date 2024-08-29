@@ -1,0 +1,26 @@
+commonLabels:
+  app: inscriptions-wei
+
+namespace: inscriptions-wei
+
+configMapGenerator:
+- name: inscriptions-wei-config
+  literals:
+  - DEBUG="False"
+  - SERVER="wei.k8s.inpt.fr"
+  - APP_ADDRESS="https://wei.k8s.inpt.fr"
+
+secretGenerator:
+- name: inscriptions-wei-secret
+  literals:
+  - SECRET_KEY="secret_key_to_change_for_prod"
+  options:
+    disableNameSuffixHash: true
+
+resources:
+- namespace.yaml
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+- pvc.yaml
+- sealed-secret.yaml
