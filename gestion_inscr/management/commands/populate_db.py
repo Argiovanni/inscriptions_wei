@@ -16,7 +16,7 @@ class Command(BaseCommand):
         csv_file_path = kwargs['csv_file_path']
         print("start script")
         with open(csv_file_path, 'r') as fd :
-            reader = csv.reader(fd)
+            reader = csv.reader(fd,  delimiter=';')
             next(reader, None) # skip header
             nb_created = 0
             for row in reader:
@@ -41,19 +41,18 @@ class Command(BaseCommand):
                     paiement = 'C'
                 
                 type_billet = row[8]
-                if (type_billet == "cotisants"):
-                    billet = 'O'
+                if ("Non cotisants" in type_billet):
+                    billet = 'N'
                 else:
-                    billet = type_billet[0].upper()
-                    if billet == 'F':
-                        billet = 'A'
+                    billet = 'O'
 
                 if row[9] == "Oui":
                     cotise_AE = True
                 else :
                     cotise_AE = False
                 
-                if (type_billet != "non cotisants") and not cotise_AE:
+                # should not be usefull but let it here for now
+                if (billet == 'O') and not cotise_AE:
                     comment = "/!\ need payer cotisation"
                 else :
                     comment = None
@@ -65,6 +64,11 @@ class Command(BaseCommand):
                 promo = row[11]
                 if not promo.strip():
                     promo = "V"
+                
+                if promo == "1A":
+                    caution = 100.0
+                else :
+                    caution = 200.0
                 
                 # prix 
                 prix = float(row[15])
@@ -80,10 +84,14 @@ class Command(BaseCommand):
                     # inscrit exist in DB
                     pass
                 else:
-                    inscrit_obj = Inscrit.objects.create(nom=nom,prenom=prenom,promo=promo,filier=filiere,
-                                cautisant=cotise_AE, prix_place=prix,paiement=paiement,place_paye=place_paye,
-                                code_billet=code_billet,type_billet=billet, commentaires=comment)
-                    nb_created += 1
-                    print("created inscrit : ", inscrit_obj)
+                    if row[6] == "Oui":
+                        # place annulée
+                        pass
+                    else:
+                        inscrit_obj = Inscrit.objects.create(nom=nom,prenom=prenom,promo=promo,filier=filiere,
+                                    cautisant=cotise_AE, prix_place=prix,paiement=paiement,place_paye=place_paye,
+                                    code_billet=code_billet,valeur_caution= caution, type_billet=billet, commentaires=comment)
+                        nb_created += 1
+                        print("created inscrit : ", inscrit_obj)
             print("nb inscrit objects created : ", nb_created)
                 
