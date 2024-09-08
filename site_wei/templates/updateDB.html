@@ -1,0 +1,41 @@
+{% extends "layouts/base.html" %}
+{% block title %} Acceuil {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<section class="section-header overflow-hidden pt-7 pt-lg-8 pb-9 pb-lg-12">
+    <div class="container">
+        <div class="row">
+            <p class="text-center">
+                {% if msg %}
+                    {{ msg | safe }}
+                {% endif %}  
+            </p>        
+            <div class="col-12 text-center">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div>
+                        <div>
+                            <label>Shotgun Wei Churros .csv</label>
+                            {{ form.csv_file }}
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" name=csv_file class="btn btn-icon btn-info"
+                            onclick="return confirm('Voulez vous vraiment uploader ce fichier csv dans la DB ?');">
+                                Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

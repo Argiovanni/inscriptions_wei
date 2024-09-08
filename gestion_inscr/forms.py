@@ -39,3 +39,14 @@ class AddMemberForm(forms.Form):
 
 class MontantCautionForm(forms.Form):
     montant = forms.FloatField(widget=forms.NumberInput,required=True, initial=0)
+
+
+class CsvFileForm(forms.Form):
+    csv_file = forms.FileField(
+        required=False, 
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control', 
+                'placeholder': 'Upload "products.csv"', 
+                'help_text': 'Choose a .csv file with products to enter'
+        }))

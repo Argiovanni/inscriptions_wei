@@ -12,4 +12,5 @@ urlpatterns = [
     path("bungalow", views.bungalow, name="bungalow"),
     path('login/', views.login_view, name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("upload_csv/", views.update_db_from_csv, name="upload_csv")
 ]
