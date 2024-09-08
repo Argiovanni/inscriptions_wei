@@ -37,11 +37,8 @@ class Command(BaseCommand):
                     paiement = 'L'
                 elif type_paiement == "Cash" :
                     paiement = 'E'
-                elif type_paiement == "Check" :
+                else : # chèque
                     paiement = 'C'
-                else :
-                    paiement = ''
-                    print("pb row 7 : methode paiement non reconu", type_paiement)
                 
                 type_billet = row[8]
                 if (type_billet == "cotisants"):
@@ -70,18 +67,7 @@ class Command(BaseCommand):
                     promo = "V"
                 
                 # prix 
-                #  BILLET_CHOICES = [('N',"non-cotisant"),('O',"Cotisant"), ('A',"AE"), ('C',"can7"), ('T',"tvn7"), ('P',"photo7")]
-                if billet == 'C': #Can7
-                    prix = 0.0
-                elif billet == 'O': #cautisant
-                    if promo == "1A":
-                        prix = 140.0 # a voir si c'est le bon prix
-                    else :
-                        prix = 160.0 # a voir si c'est le bon prix
-                elif billet == 'N': #non cautisant
-                    prix = 205.0 # a voir si c'est le bon prix
-                else: # AE, tvn7, photo7, 
-                    prix = 145.0
+                prix = float(row[15])
                 
                 code_billet = row[13]
                 
@@ -95,7 +81,7 @@ class Command(BaseCommand):
                     pass
                 else:
                     inscrit_obj = Inscrit.objects.create(nom=nom,prenom=prenom,promo=promo,filier=filiere,
-                                cautisant=cotise_AE, prix_place=145.0,paiement=paiement,place_paye=place_paye,
+                                cautisant=cotise_AE, prix_place=prix,paiement=paiement,place_paye=place_paye,
                                 code_billet=code_billet,type_billet=billet, commentaires=comment)
                     nb_created += 1
                     print("created inscrit : ", inscrit_obj)
