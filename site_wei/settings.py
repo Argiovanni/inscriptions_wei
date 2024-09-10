@@ -82,8 +82,12 @@ WSGI_APPLICATION = 'site_wei.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db' / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'inscriptions-wei',
+        'USER': 'inscriptions-wei',
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': 'mysql.bde.inp',
+        'PORT': '3306',
     }
 }
 
