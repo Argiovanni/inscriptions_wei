@@ -20,11 +20,4 @@ spec:
             name: inscriptions-wei-config
         - secretRef:
             name: inscriptions-wei-secret
-        volumeMounts:
-        - mountPath: /db
-          name: inscriptions-wei-data
-      volumes:
-      - name: inscriptions-wei-data
-        persistentVolumeClaim:
-          claimName: inscriptions-wei-pvc
 
