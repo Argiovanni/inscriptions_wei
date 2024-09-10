@@ -53,8 +53,8 @@ class Inscrit(models.Model):
     PAIEMENT_CHOICES = [('L', "Lydia"), ('C',"Chèque"), ('E', "Espèce")]
     BILLET_CHOICES = [('N',"non-cotisant"),('O',"Cotisant"), ('A',"AE"), ('C',"can7"), ('T',"tvn7"), ('P',"photo7")]
 
-    nom = models.CharField(max_length=24)
-    prenom = models.CharField(max_length=24)
+    nom = models.CharField(max_length=255)
+    prenom = models.CharField(max_length=255)
     promo = models.CharField(max_length=2, choices=PROMO_CHOICES, default="1A") # 1A / 2A / 3A / vieux
     filier = models.CharField(max_length=4, choices=FILIERE_CHOICES, default="SN") # SN / 3EA / MF2E
     cautisant = models.BooleanField(default=False)
